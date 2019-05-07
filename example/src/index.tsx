@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import "./style.less";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 

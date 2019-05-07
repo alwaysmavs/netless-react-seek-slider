@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./styles.less";
+import styles from "./styles.less";
 
 export type Time = {
   hh: string;
@@ -18,6 +18,7 @@ export type VideoSeekSliderProps = {
   minutesPrefix?: string;
   limitTimeTooltipBySides?: boolean;
   sliderColor?: string;
+  sliderHoverColor?: string;
   thumbColor?: string;
   bufferColor?: string;
 };
@@ -229,13 +230,13 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
     if (this.props.bufferProgress) {
       if (this.props.bufferColor) {
         return <div
-          className="buffered"
+          className={styles.buffered}
           style={{...this.getPositionStyle(this.props.bufferProgress),
             backgroundColor: this.props.bufferColor,
           }}/>;
       } else {
         return <div
-          className="buffered"
+          className={styles.buffered}
           style={this.getPositionStyle(this.props.bufferProgress)}/>;
       }
     } else {
@@ -245,38 +246,41 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
   private renderProgress = () => {
     if (this.props.sliderColor) {
-      return [
-        <div
-        className="seek-hover"
-        style={{...this.getSeekHoverPosition(), backgroundColor: this.props.sliderColor}}/>,
-        <div
-          className="connect"
+      return <div
+          className={styles.connect}
           style={{...this.getPositionStyle(this.props.currentTime), backgroundColor: this.props.sliderColor}}
-        />];
+      />;
     } else {
-      return [
-        <div
-          className="seek-hover"
-          style={this.getSeekHoverPosition()}/>,
-        <div
-          className="connect"
-          style={this.getPositionStyle(this.props.currentTime)}
-        />];
+      return <div
+          className={styles.connect}
+          style={this.getPositionStyle(this.props.currentTime)}/>;
     }
   }
+
+    private renderHoverProgress = () => {
+        if (this.props.sliderHoverColor) {
+            return <div
+                className={styles["seek-hover"]}
+                style={{...this.getSeekHoverPosition(), backgroundColor: this.props.sliderHoverColor}}/>;
+        } else {
+            return <div
+                className={styles["seek-hover"]}
+                style={this.getSeekHoverPosition()}/>;
+        }
+    }
 
   private renderThumb = (): React.ReactNode => {
     if (this.props.thumbColor) {
       return <div
-        className={this.isThumbActive() ? "thumb active" : "thumb"}
+        className={this.isThumbActive() ? `${styles.thumb} ${styles.active}` : styles.thumb}
         style={{...this.getThumbHandlerPosition()}}>
-        <div style={{backgroundColor: this.props.thumbColor}} className="handler"/>
+        <div style={{backgroundColor: this.props.thumbColor}} className={styles.handler}/>
       </div>;
     } else {
       return <div
-        className={this.isThumbActive() ? "thumb active" : "thumb"}
+        className={this.isThumbActive() ? `${styles.thumb} ${styles.active}` : styles.thumb}
         style={{...this.getThumbHandlerPosition()}}>
-        <div className="handler"/>
+        <div className={styles.handler}/>
       </div>;
     }
   }
@@ -285,7 +289,7 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
     if (!this.props.hideHoverTime) {
       return (
         <div
-          className={this.isThumbActive() ? "hover-time active" : "hover-time"}
+          className={this.isThumbActive() ? `${styles["hover-time"]} ${styles.active}` : styles["hover-time"]}
           style={this.getHoverTimePosition()}
           ref={ref => this.hoverTime = ref}
         >
@@ -299,17 +303,18 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
   public render(): React.ReactNode {
     return (
-      <div className="ui-video-seek-slider">
+      <div className={styles["ui-video-seek-slider"]}>
         <div
-          className={this.isThumbActive() ? "track active" : "track"}
+          className={this.isThumbActive() ? `${styles.track} ${styles.active}` : styles.track}
           ref={ref => this.track = ref}
           onMouseMove={evt => this.handleTrackHover(false, evt)}
           onMouseLeave={evt => this.handleTrackHover(true, evt)}
           onMouseDown={evt => this.setSeeking(true, evt)}
           onTouchStart={() => this.setMobileSeeking(true)}
         >
-          <div className="main">
+          <div className={styles.main}>
             {this.renderBufferProgress()}
+            {this.renderHoverProgress()}
             {this.renderProgress()}
           </div>
         </div>
