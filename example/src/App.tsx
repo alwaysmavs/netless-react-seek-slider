@@ -1,5 +1,6 @@
 import * as React from "react";
 import SeekSlider from "@netless/seek-slider";
+import "./App.less";
 
 export type AppStates = {
     currentTime: number;
@@ -37,6 +38,7 @@ export default class App extends React.Component<{}, AppStates> {
             thumbColor={"black"}
             bufferColor={"#D8D8D8"}
             sliderColor={"pink"}
+            sliderHoverColor={"#E3E3E3"}
             currentTime={this.state.currentTime}
             bufferProgress={this.state.progress}
             onChange={(time: number, offsetTime: number) => {
