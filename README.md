@@ -8,7 +8,7 @@
 
 ## 1. 说明
 
-本项目技术选型为：`React` `Typescript `
+本项目技术选型为：`React` `Typescript`
 打包工具为： `rollup`  
 
 
