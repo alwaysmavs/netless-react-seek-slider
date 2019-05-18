@@ -10,10 +10,10 @@ export type Time = {
 export type VideoSeekSliderProps = {
   fullTime: number;
   currentTime: number;
-  bufferProgress?: number;
   onChange: (time: number, offsetTime: number) => void;
+  offset?: number;
+  bufferProgress?: number;
   hideHoverTime?: boolean;
-  offset: number;
   secondsPrefix?: string;
   minutesPrefix?: string;
   limitTimeTooltipBySides?: boolean;
@@ -38,9 +38,21 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
   private mobileSeeking: boolean;
   private track: HTMLDivElement | null;
   private hoverTime: HTMLDivElement | null;
+  private readonly offset: number = 0;
+  private readonly secondsPrefix: string = "00:00:";
+  private readonly minutesPrefix: string = "00:";
 
   public constructor(props: VideoSeekSliderProps) {
     super(props);
+    if (this.props.offset) {
+        this.offset = this.props.offset;
+    }
+    if (this.props.secondsPrefix) {
+        this.secondsPrefix = this.props.secondsPrefix;
+    }
+    if (this.props.minutesPrefix) {
+        this.minutesPrefix = this.props.minutesPrefix;
+    }
     this.state = {
       ready: false,
       trackWidth: 0,
@@ -98,7 +110,7 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
       const percent: number = position * 100 / this.state.trackWidth;
       const time: number = +(percent * (this.props.fullTime / 100)).toFixed(0);
-      this.props.onChange(time, (time + this.props.offset));
+      this.props.onChange(time, (time + this.offset));
     }
   }
 
@@ -167,7 +179,7 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
   }
 
   private secondsToTime(seconds: number): Time {
-    seconds = Math.round(seconds + this.props.offset);
+    seconds = Math.round(seconds + this.offset);
 
     const hours: number = Math.floor(seconds / 3600);
     const divirsForMinutes: number = seconds % 3600;
@@ -186,10 +198,10 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
     const time: number = Math.floor(+(percent * (this.props.fullTime / 100)));
     const times: Time = this.secondsToTime(time);
 
-    if ((this.props.fullTime + this.props.offset) < 60) {
-      return this.props.secondsPrefix + (times.ss);
-    } else if ((this.props.fullTime + this.props.offset) < 3600) {
-      return this.props.minutesPrefix + times.mm + ":" + times.ss;
+    if ((this.props.fullTime + this.offset) < 60) {
+      return this.secondsPrefix + (times.ss);
+    } else if ((this.props.fullTime + this.offset) < 3600) {
+      return this.minutesPrefix + times.mm + ":" + times.ss;
     } else {
       return times.hh + ":" + times.mm + ":" + times.ss;
     }
