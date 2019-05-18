@@ -46,10 +46,7 @@ export default class App extends React.Component<{}, AppStates> {
                     currentTime: time,
                 });
             }}
-            offset={0}
             limitTimeTooltipBySides={true}
-            secondsPrefix="00:00:"
-            minutesPrefix="00:"
         />;
     }
 
