@@ -1,6 +1,6 @@
 {
   "name": "@netless/react-seek-slider",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "types": "dist/index.d.ts",
   "description": "a seek slider",
   "author": "wushuang",
